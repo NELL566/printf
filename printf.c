@@ -10,7 +10,7 @@
  *Returns: the lenght of the string in printf.
  */
 
-int _printf(const char *format)
+int _printf(const char *format, ...)
 {
 	int i;
 	int len = 0;
