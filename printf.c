@@ -1,12 +1,14 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
 #include "main.h"
 /**
  * @brief
  *
  */
 
-int _printf(const char *format)
+int _printf(const char *format, ...)
 {
 	int i;
 	int len = 0;
@@ -19,6 +21,10 @@ int _printf(const char *format)
 
 	newstr = malloc(sizeof(char) * (len + 1));
 
+	if (newstr == NULL)
+	{
+		return (1);
+	}
 
 	for (i = 0; format[i] != '\0'; i++)
 	{
@@ -34,6 +40,6 @@ int _printf(const char *format)
 int main(void)
 {
 	char *s = "Let's try to printf a simple sentence.\n";
-
 	_printf(s);
+	printf("%s", s);
 }
