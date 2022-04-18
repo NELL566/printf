@@ -4,11 +4,13 @@
 #include <stdarg.h>
 #include "main.h"
 /**
- * @brief
+ *_printf - function to print out string characters with format codes
  *
+ * @format:string characters
+ *Returns: the lenght of the string in printf.
  */
 
-int _printf(const char *format, ...)
+int _printf(const char *format)
 {
 	int i;
 	int len = 0;
