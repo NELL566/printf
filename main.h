@@ -1,61 +1,90 @@
-#ifndef _MAIN_H_
-#define _MAIN_H_
-
+#ifndef MAIN.H
+#define MAIN.H
 #include <stdarg.h>
-#include <unistd.h>
 #include <stdlib.h>
-
+#include <unistd.h>
 /**
- * struct print - struct for printer functions
- * @type_arg: identifier
- * @f: pointer to a printer functions
- *
- * Description: struct that stores pointers to a
- * printer functions.
+ * struct buffer - buffer structure for our implimentation of printf
+ * @buf: buffer to write characters
+ * @tmpbuf: tmp buffer to write to before putting in buffer
+ * @format: the string passed to our printf
+ * @ap: the variadic address point
+ * @bp: the current point in the buffer
+ * @tp: the current point in the tmp buffer
+ * @fp: the current point in the format
+ * @printed: the number of chars printed from _write
  */
-typedef struct print
+typedef struct buffer
 {
-	char *type_arg;
-	int (*f)(va_list, char *, unsigned int);
-} print_t;
+	char *buf;
+	char *tmpbuf;
+	const char *format;
+	va_list ap;
+	int bp;
+	int tp;
+	int fp;
+	unsigned int printed;
+} buffer;
+/**
+ *struct handlers - handlers struct
+ *@plus:'+' flag
+ *@space:' ' flag
+ *@hash:'#' flag
+ *@zero:'0' flag
+ *@minus:'-' handler
+ *@width:width handler
+ *@precision:precision handler
+ *@h_mod:h modifier handler
+ *@l_mod:l modifier handler
+ */
+typedef struct handlers
+{
+	unsigned int plus;
+	unsigned int space;
+	unsigned int hash;
+	unsigned int zero;
+	unsigned int minus;
+	unsigned int width;
+	unsigned int precision;
+	unsigned int h_mod;
+	unsigned int l_mod;
+} han_s;
+/**
+ * struct ops - a structure containing a char to compare with formatb modifiers
+ * and then choose the right function when it matches
+ * @operation: the char we want to compare to
+ * @func: the address of the function we want to return if a char matches
+ */
+typedef struct ops
+{
+	char operation;
+	int (*func)(va_list);
+} ops_f;
 
 int _printf(const char *format, ...);
-int print_prg(va_list __attribute__((unused)), char *, unsigned int);
-int print_chr(va_list arguments, char *buf, unsigned int ibuf);
-int print_str(va_list arguments, char *buf, unsigned int ibuf);
-int print_int(va_list arguments, char *buf, unsigned int ibuf);
-int print_bnr(va_list arguments, char *buf, unsigned int ibuf);
-int print_unt(va_list arguments, char *buf, unsigned int ibuf);
-int print_oct(va_list arguments, char *buf, unsigned int ibuf);
-int print_hex(va_list arguments, char *buf, unsigned int ibuf);
-int print_upx(va_list arguments, char *buf, unsigned int ibuf);
-int print_usr(va_list arguments, char *buf, unsigned int ibuf);
-int print_add(va_list arguments, char *buf, unsigned int ibuf);
-int print_rev(va_list arguments, char *buf, unsigned int ibuf);
-int print_rot(va_list arguments, char *buf, unsigned int ibuf);
-int prinlint(va_list arguments, char *buf, unsigned int ibuf);
-int prinlunt(va_list arguments, char *buf, unsigned int ibuf);
-int prinloct(va_list arguments, char *buf, unsigned int ibuf);
-int prinlhex(va_list arguments, char *buf, unsigned int ibuf);
-int prinlupx(va_list arguments, char *buf, unsigned int ibuf);
-int prinhint(va_list arguments, char *buf, unsigned int ibuf);
-int prinhunt(va_list arguments, char *buf, unsigned int ibuf);
-int prinhoct(va_list arguments, char *buf, unsigned int ibuf);
-int prinhhex(va_list arguments, char *buf, unsigned int ibuf);
-int prinhupx(va_list arguments, char *buf, unsigned int ibuf);
-int prinpint(va_list arguments, char *buf, unsigned int ibuf);
-int prinnoct(va_list arguments, char *buf, unsigned int ibuf);
-int prinnhex(va_list arguments, char *buf, unsigned int ibuf);
-int prinnupx(va_list arguments, char *buf, unsigned int ibuf);
-int prinsint(va_list arguments, char *buf, unsigned int ibuf);
-int (*get_print_func(const char *s, int index))(va_list, char *, unsigned int);
-int ev_print_func(const char *s, int index);
-unsigned int handl_buf(char *buf, char c, unsigned int ibuf);
-int print_buf(char *buf, unsigned int nbuf);
-char *fill_binary_array(char *binary, long int int_in, int isneg, int limit);
-char *fill_oct_array(char *bnr, char *oct);
-char *fill_long_oct_array(char *bnr, char *oct);
-char *fill_short_oct_array(char *bnr, char *oct);
-char *fill_hex_array(char *bnr, char *hex, int isupp, int limit);
+int _putchar(char c);
+int (*get_func(char ch))(va_list);
+int print_char(va_list list);
+int print_string(va_list list);
+int print_nan(char ch1, char ch2);
+int print_num(va_list list);
+unsigned int base_len(unsigned int num, int base);
+int print_binary(va_list list);
+int print_octal(va_list list);
+int print_hex(va_list list);
+int print_Hex(va_list list);
+int print_S(va_list list);
+int *rev_string(char *s);
+char *hex_conv(int num);
+int print_p(va_list list);
+int print_unsigned(va_list list);
+int print_rot13(va_list list);
+void _write(buffer *b_r, char c);
+void _write_str(buffer *b_r, char *s);
+void _write_tmpbuf(buffer *b_r);
+int print_r(va_list list);
 
-#endif
+
+
+
+#endif /*MAIN.H*/
